@@ -25,3 +25,60 @@ p {
   font-size: large;
   font-weight: bold;
 }
+
+h1 {
+  text-align: center;
+  color: white;
+}
+
+img {
+  display: block;
+  width: 230px;
+  height: 230px;
+}
+
+.add-favorite {
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.35s ease-in-out;
+  background-color: rgb(248, 6, 6);
+  padding: 5px 10px;
+  border-radius: 8px;
+  position: absolute;
+  padding: 5px;
+  top: 30px;
+}
+
+.delete-image {
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.35s ease-in-out;
+  padding: 5px 10px;
+  border-radius: 8px;
+  position: absolute;
+  padding: 5px;
+  top: 65px;
+}
+
+.gallery {
+  display: grid;
+  margin-top: 10px;
+  grid-template-columns: repeat(6, auto);
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  position: relative;
+}
+
+.favorite-icon {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 24px;
+  width: 30px;
+  height: 30px;
+}
