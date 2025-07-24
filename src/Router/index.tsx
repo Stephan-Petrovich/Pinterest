@@ -1,9 +1,11 @@
 import Homepage from "../pages/Homepage";
 import Favorites from "../pages/Favorites";
-import Header from "../components/Header";
+import Header from "../components/HeaderMain";
 
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import type { Photo } from "../domains";
+import Pins from "../pages/Pins";
+import Boards from "../pages/Boards";
 
 const Router: React.FC<{
   photos: Photo[];
@@ -33,7 +35,28 @@ const Router: React.FC<{
               deletePhoto={deletePhoto}
             />
           }
-        />
+        >
+          <Route
+            path="/favorites/pins"
+            element={
+              <Pins
+                photos={photos}
+                onToggleFavorite={onToggleFavorite}
+                deletePhoto={deletePhoto}
+              />
+            }
+          />
+          <Route
+            path="/favorites/boards"
+            element={
+              <Boards
+                photos={photos}
+                onToggleFavorite={onToggleFavorite}
+                deletePhoto={deletePhoto}
+              />
+            }
+          />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

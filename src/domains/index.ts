@@ -1,8 +1,8 @@
 export interface Photo {
-  albumId: number | string;
   id: number;
   url: string;
+  description: string;
   title: string;
-  thumbnailUrl: string;
   isFavorite: boolean;
+  deleted: boolean;
 }

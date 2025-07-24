@@ -1,12 +1,11 @@
 import type { Photo } from "../../domains";
-import Header from "../../components/HeaderFav";
 
-const Favorites: React.FC<{
+const Boards: React.FC<{
   photos: Photo[];
   onToggleFavorite: (id: number) => void;
   deletePhoto: (id: number) => void;
 }> = () => {
-  return <Header />;
+  return <p>Досок пока что нет</p>;
 };
 
-export default Favorites;
+export default Boards;
