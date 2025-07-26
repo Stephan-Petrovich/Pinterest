@@ -1,21 +1,16 @@
 import type { Photo } from "../../domains";
 import Card from "../../components/Card";
+import type { ReactElement } from "react";
+import { usePhotoContext } from "../../context/PhotoContext";
 
-const Pins: React.FC<{
-  photos: Photo[];
-  onToggleFavorite: (id: number) => void;
-  deletePhoto: (id: number) => void;
-}> = ({ photos, onToggleFavorite, deletePhoto }) => {
+const Pins = (): ReactElement => {
+  const { photos } = usePhotoContext();
+
   const favoriteImages = photos.filter((photo: Photo) => photo.isFavorite);
   return (
     <div className="gallery">
       {favoriteImages.map((photo) => (
-        <Card
-          key={photo.id}
-          photo={photo}
-          onToggleFavorite={onToggleFavorite}
-          deletePhoto={deletePhoto}
-        />
+        <Card key={photo.id} photo={photo} />
       ))}
     </div>
   );

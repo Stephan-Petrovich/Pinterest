@@ -1,61 +1,21 @@
 import Homepage from "../pages/Homepage";
-import Favorites from "../pages/Favorites";
-import Header from "../components/HeaderMain";
-
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import type { Photo } from "../domains";
+import FavoritesLayout from "../pages/User";
+import DefaultLayout from "../layout/DefaultLayout";
 import Pins from "../pages/Pins";
 import Boards from "../pages/Boards";
 
-const Router: React.FC<{
-  photos: Photo[];
-  onToggleFavorite: (id: number) => void;
-  deletePhoto: (id: number) => void;
-}> = ({ photos, onToggleFavorite, deletePhoto }) => {
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import type { ReactElement } from "react";
+
+const Router = (): ReactElement => {
   return (
     <BrowserRouter>
-      <Header />
+      <DefaultLayout />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Homepage
-              photos={photos}
-              onToggleFavorite={onToggleFavorite}
-              deletePhoto={deletePhoto}
-            />
-          }
-        />
-        <Route
-          path="/favorites"
-          element={
-            <Favorites
-              photos={photos}
-              onToggleFavorite={onToggleFavorite}
-              deletePhoto={deletePhoto}
-            />
-          }
-        >
-          <Route
-            path="/favorites/pins"
-            element={
-              <Pins
-                photos={photos}
-                onToggleFavorite={onToggleFavorite}
-                deletePhoto={deletePhoto}
-              />
-            }
-          />
-          <Route
-            path="/favorites/boards"
-            element={
-              <Boards
-                photos={photos}
-                onToggleFavorite={onToggleFavorite}
-                deletePhoto={deletePhoto}
-              />
-            }
-          />
+        <Route path="/" element={<Homepage />} />
+        <Route path="/favorites" element={<FavoritesLayout />}>
+          <Route path="pins" element={<Pins />} />
+          <Route path="boards" element={<Boards />} />
         </Route>
       </Routes>
     </BrowserRouter>

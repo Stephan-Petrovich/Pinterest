@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(255, 253, 253);
+  background-color: rgb(56, 52, 52);
 }
 
 header {
@@ -9,12 +9,12 @@ header {
   align-items: center;
 }
 
-.headerMain {
+.header-main {
   background-color: rgb(126, 124, 124);
   height: 80px;
 }
 
-.headerFav {
+.header-fav {
   background-color: rgb(71, 71, 71);
   height: 40px;
 }

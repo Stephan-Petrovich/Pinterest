@@ -1,12 +1,13 @@
 import favoriteIconSrc from "../../assets/images/favoriteIcon.svg";
 import type { Photo } from "../../domains";
 import { useState } from "react";
+import { usePhotoContext } from "../../context/PhotoContext";
 
 const Card: React.FC<{
   photo: Photo;
-  onToggleFavorite: (id: number) => void;
-  deletePhoto: (id: number) => void;
-}> = ({ photo, onToggleFavorite, deletePhoto }) => {
+}> = ({ photo }) => {
+  const { handleToggleFavorite, handleDeletePhoto } = usePhotoContext();
+
   const [isHovered, setIsHovered] = useState<boolean>(false);
   return (
     <div
@@ -21,7 +22,7 @@ const Card: React.FC<{
       <img src={photo.url} alt={photo.title} loading="lazy"></img>
       <button
         className="add-favorite"
-        onClick={() => onToggleFavorite(photo.id)}
+        onClick={() => handleToggleFavorite(photo.id)}
         style={{
           visibility: isHovered ? "visible" : "hidden",
           opacity: isHovered ? "1" : "0",
@@ -31,7 +32,7 @@ const Card: React.FC<{
       </button>
       <button
         className="delete-image"
-        onClick={() => deletePhoto(photo.id)}
+        onClick={() => handleDeletePhoto(photo.id)}
         style={{
           visibility: isHovered ? "visible" : "hidden",
           opacity: isHovered ? "1" : "0",

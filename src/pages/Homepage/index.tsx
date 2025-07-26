@@ -1,12 +1,11 @@
 import { Fragment } from "react/jsx-runtime";
 import Card from "../../components/Card";
-import type { Photo } from "../../domains";
+import { type ReactElement } from "react";
+import { usePhotoContext } from "../../context/PhotoContext";
 
-const Homepage: React.FC<{
-  photos: Photo[];
-  onToggleFavorite: (id: number) => void;
-  deletePhoto: (id: number) => void;
-}> = ({ photos, onToggleFavorite, deletePhoto }) => {
+const Homepage = (): ReactElement => {
+  const { photos } = usePhotoContext();
+
   const visiblePhotos = photos.filter((photo) => !photo.deleted);
 
   return (
@@ -18,12 +17,7 @@ const Homepage: React.FC<{
       ) : (
         <div className="gallery">
           {visiblePhotos.map((photo) => (
-            <Card
-              key={photo.id}
-              photo={photo}
-              onToggleFavorite={onToggleFavorite}
-              deletePhoto={deletePhoto}
-            />
+            <Card key={photo.id} photo={photo} />
           ))}
         </div>
       )}

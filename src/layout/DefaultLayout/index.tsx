@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import type { ReactElement } from "react";
 
-const HeaderMain = (): ReactElement => {
+const DefaultLayout = (): ReactElement => {
   return (
     <header className="header-main">
       <Link to="/">Главная</Link>
@@ -10,4 +10,4 @@ const HeaderMain = (): ReactElement => {
   );
 };
 
-export default HeaderMain;
+export default DefaultLayout;
