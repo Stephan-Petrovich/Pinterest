@@ -1,11 +1,10 @@
 import { Fragment } from "react/jsx-runtime";
 import Card from "../../components/Card";
-import { type ReactElement } from "react";
+import type { ReactElement } from "react";
 import { usePhotoContext } from "../../context/PhotoContext";
 
 const Homepage = (): ReactElement => {
   const { photos } = usePhotoContext();
-
   const visiblePhotos = photos.filter((photo) => !photo.deleted);
 
   return (

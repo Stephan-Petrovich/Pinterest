@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { Photo } from "../../domains";
 import { fetchPhotos } from "../../api";
-import { getSavedPhotos, savePhotos } from "../../services/photoService";
+import { PhotoService } from "../../services/photoService";
 
 interface IPhotoContext {
   photos: Photo[];
@@ -11,12 +11,14 @@ interface IPhotoContext {
 
 const PhotoContext = createContext<IPhotoContext | null>(null);
 
-export const PhotoProvider: React.FC<{ children: React.ReactNode }> = () => {
+export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   useEffect(() => {
     const loadPhotos = async () => {
-      const savedPhotos = getSavedPhotos();
+      const savedPhotos = PhotoService.getSavedPhotos();
 
       if (savedPhotos) {
         setPhotos(savedPhotos);
@@ -26,7 +28,7 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = () => {
       try {
         const fetchedPhotos = await fetchPhotos();
         setPhotos(fetchedPhotos);
-        savePhotos(fetchedPhotos);
+        PhotoService.savePhotos(fetchedPhotos);
       } catch (error) {
         console.error("Ошибка загрузки фото:", error);
       }
@@ -38,34 +40,50 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = () => {
   useEffect(() => {
     console.log("Photos loaded:", photos);
     if (photos.length > 0) {
-      savePhotos(photos);
+      PhotoService.savePhotos(photos);
     }
   }, [photos]);
 
   const handleToggleFavorite = (id: number) => {
-    setPhotos((prevPhotos) =>
-      prevPhotos.map((photo) =>
-        photo.id === id ? { ...photo, isFavorite: !photo.isFavorite } : photo
-      )
-    );
+    setPhotos((prevPhotos) => {
+      const index = prevPhotos.findIndex((photo) => photo.id === id);
+      if (index === -1) return prevPhotos;
+
+      const newPhotos = [...prevPhotos];
+      newPhotos[index] = {
+        ...newPhotos[index],
+        isFavorite: !newPhotos[index].isFavorite,
+      };
+
+      return newPhotos;
+    });
   };
 
   const handleDeletePhoto = (id: number) => {
-    setPhotos((prevPhotos) =>
-      prevPhotos.map((photo) =>
-        photo.id === id ? { ...photo, deleted: true } : photo
-      )
-    );
+    setPhotos((prevPhotos) => {
+      const index = prevPhotos.findIndex((photo) => photo.id === id);
+      if (index === -1) return prevPhotos;
+
+      const newPhotos = [...prevPhotos];
+      newPhotos[index] = {
+        ...newPhotos[index],
+        deleted: true,
+        isFavorite: false,
+      };
+
+      return newPhotos;
+    });
   };
 
   return (
     <PhotoContext.Provider
       value={{ photos, handleToggleFavorite, handleDeletePhoto }}
-    />
+    >
+      {children}
+    </PhotoContext.Provider>
   );
 };
 
-//Как происходит получение данных из компонента (файла PhotoContext) при помощи хука useContext? Он извлекает, получает доступ или запрашивает данные?
 export const usePhotoContext = () => {
   const context = useContext(PhotoContext);
   if (!context) {
