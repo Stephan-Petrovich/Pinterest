@@ -5,8 +5,8 @@ import { usePhotoContext } from "../../context/PhotoContext";
 
 const Homepage = (): ReactElement => {
   const { photos } = usePhotoContext();
-  const visiblePhotos = photos.filter((photo) => !photo.deleted);
 
+  const visiblePhotos = photos.filter((photo) => !photo.deleted);
   return (
     <Fragment>
       <h1>Галерея фотографий</h1>

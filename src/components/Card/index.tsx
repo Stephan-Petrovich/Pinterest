@@ -1,14 +1,18 @@
-import favoriteIconSrc from "../../assets/images/favoriteIcon.svg";
-import type { Photo } from "../../domains";
-import { useState } from "react";
 import { usePhotoContext } from "../../context/PhotoContext";
+import { useBoardContext } from "../../context/BoardContext";
+import { useState } from "react";
+import type { Photo } from "../../domains";
+import favoriteIconSrc from "../../assets/images/favoriteIcon.svg";
+import "./styles.css";
 
 const Card: React.FC<{
   photo: Photo;
 }> = ({ photo }) => {
   const { handleToggleFavorite, handleDeletePhoto } = usePhotoContext();
+  const { openBoardModal } = useBoardContext();
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const buttonFavoriteClassname: string = !photo.isFavorite ? "" : "favorite";
   return (
     <div
       className="card"
@@ -21,7 +25,7 @@ const Card: React.FC<{
     >
       <img src={photo.url} alt={photo.title} loading="lazy"></img>
       <button
-        className="add-favorite"
+        className={`add-favorite ${buttonFavoriteClassname}`}
         onClick={() => handleToggleFavorite(photo.id)}
         style={{
           visibility: isHovered ? "visible" : "hidden",
@@ -39,6 +43,9 @@ const Card: React.FC<{
         }}
       >
         Удалить
+      </button>
+      <button onClick={() => openBoardModal(photo.id)} className="add-to-board">
+        Добавить в доску
       </button>
       <img
         className="favorite-icon"

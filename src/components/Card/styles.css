@@ -2,7 +2,7 @@
   opacity: 0;
   visibility: hidden;
   transition: 0.35s ease-in-out;
-  background-color: gray;
+  background-color: #e60023;
   padding: 5px 10px;
   border-radius: 8px;
   position: absolute;
@@ -10,11 +10,6 @@
   top: 30px;
 }
 
-.add-favorite.hovered {
-  opacity: 1;
-  visibility: visible;
-}
-
 .add-favorite.favorite {
-  background-color: #e60023;
+  background-color: gray;
 }

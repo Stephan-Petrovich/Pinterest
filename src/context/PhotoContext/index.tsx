@@ -38,7 +38,6 @@ export const PhotoProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   useEffect(() => {
-    console.log("Photos loaded:", photos);
     if (photos.length > 0) {
       PhotoService.savePhotos(photos);
     }

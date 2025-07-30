@@ -1,12 +1,15 @@
 import Router from "../../Router";
 import { PhotoProvider } from "../../context/PhotoContext";
+import { BoardProvider } from "../../context/BoardContext";
 import type { ReactElement } from "react";
 import "./styles.css";
 
 const App = (): ReactElement => {
   return (
     <PhotoProvider>
-      <Router />
+      <BoardProvider>
+        <Router />
+      </BoardProvider>
     </PhotoProvider>
   );
 };

@@ -1,7 +1,19 @@
 import type { Photo } from "../domains";
 
 export class PhotoService {
-  private static readonly STORAGE_KEY = "photos";
+  private static readonly STORAGE_KEY = "photos"; // Это ключи для сохранения/загрузки фотографий из локального хранилища.
+
+  /**
+   * Сохраняет фотографии в localStorage
+   * @param photos Массив фотографий для сохранения
+   */
+  public static savePhotos(photos: Photo[]): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(photos)); // Как работает связка this с STORAGE_KEY?
+    } catch (error) {
+      console.error("Ошибка при сохранении в localStorage:", error);
+    }
+  }
 
   /**
    * Получает сохранённые фотографии из localStorage
@@ -14,18 +26,6 @@ export class PhotoService {
     } catch (error) {
       console.error("Ошибка при чтении из localStorage:", error);
       return null;
-    }
-  }
-
-  /**
-   * Сохраняет фотографии в localStorage
-   * @param photos Массив фотографий для сохранения
-   */
-  public static savePhotos(photos: Photo[]): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(photos));
-    } catch (error) {
-      console.error("Ошибка при сохранении в localStorage:", error);
     }
   }
 }
