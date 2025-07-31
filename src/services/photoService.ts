@@ -1,7 +1,7 @@
 import type { Photo } from "../domains";
 
 export class PhotoService {
-  private static readonly STORAGE_KEY = "photos"; // Это ключи для сохранения/загрузки фотографий из локального хранилища.
+  public static readonly STORAGE_KEY = "photos"; // Это ключи для сохранения/загрузки фотографий из локального хранилища.
 
   /**
    * Сохраняет фотографии в localStorage

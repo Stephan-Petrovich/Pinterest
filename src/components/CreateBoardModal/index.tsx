@@ -1,57 +1,90 @@
 import { useState } from "react";
-import type { Board } from "../../domains";
-import { BoardService } from "../../services/boardService";
+import { useBoardContext } from "../../context/BoardContext";
 
-interface ICreateBoardModalProps {
-  isOpen: boolean;
-  onClose: () => void; //Функция закрытия модалки
-  onCreate: (board: Board) => void; //Колбэк создания доски
-}
+const CreateBoardModal = () => {
+  const {
+    isBoardModalOpen,
+    closeBoardModal,
+    createBoard,
+    addPhotoToBoard,
+    boards,
+    selectedPhotoId,
+  } = useBoardContext();
 
-const CreateBoardModal = ({
-  isOpen, //props isOpen контролирует видимость модалки
-  onClose, //Функция, вызывающаяся при закрытии модального окна
-  onCreate,
-}: ICreateBoardModalProps) => {
-  const [title, setTitle] = useState(""); //Состояние для хранения доски
+  const [title, setTitle] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
-    //e - это объект события (event) , React.FormEvent - тип TS для событий форм, содержащий информацию о событии
-    e.preventDefault(); //Отменяет стандартное поведение браузера при отправке формы
+    e.preventDefault();
     if (title.trim()) {
-      //Проверяет пустое ли название ,trim удаляет пробелы с обоих концов строке
-      const newBoard = BoardService.createBoard(title);
-      onCreate(newBoard);
+      createBoard(title);
       setTitle("");
-      onClose();
     }
   };
 
-  if (!isOpen) return null;
+  if (!isBoardModalOpen) return null;
   // тег form позволяет принять от пользователя входящую информацию и передаёт её для дальнейшей обработки на стороне сервера
   return (
-    <div>
-      <div>
-        <h2>Создать новую доску</h2>
-        <form onSubmit={handleSubmit}>
-          {" "}
+    <div className="board-modal-overlay">
+      <div className="board-modal-container">
+        <header className="board-modal-header">
+          <h2 className="board-modal-title">
+            {selectedPhotoId ? "Добавить в доску" : "Создать доску"}
+          </h2>
+          <button className="board-modal-close" onClick={closeBoardModal}>
+            ✕
+          </button>
+        </header>
+
+        {boards.length > 0 && selectedPhotoId && (
+          <div className="board-modal-form">
+            <h3 className="board-card-title">Существующие доски:</h3>
+            <div className="board-grid">
+              {boards.map((board) => (
+                <button
+                  key={board.id}
+                  onClick={() => {
+                    addPhotoToBoard(board.id, selectedPhotoId);
+                    closeBoardModal();
+                  }}
+                  className="board-card"
+                >
+                  <div className="board-card-content">
+                    <h3 className="board-card-title">{board.title}</h3>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="board-modal-form">
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)} //onChange срабатывает при изменении значения элемента HTML
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="Название доски"
+            className="board-modal-input"
             autoFocus
           />
-          <div>
-            <button type="button" onClick={onClose}>
+          <div className="board-modal-actions">
+            <button
+              type="button"
+              className="board-modal-btn"
+              onClick={closeBoardModal}
+            >
               Отмена
             </button>
-            <button type="submit">Создать</button>
+            <button
+              type="submit"
+              className="board-modal-primary-btn"
+              disabled={!title.trim()}
+            >
+              Создать
+            </button>
           </div>
         </form>
       </div>
     </div>
   );
 };
-
 export default CreateBoardModal;

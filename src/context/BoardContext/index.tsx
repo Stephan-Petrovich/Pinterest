@@ -1,5 +1,6 @@
 import { useState, useContext, createContext } from "react";
 import { BoardService } from "../../services/boardService";
+import { PhotoService } from "../../services/photoService";
 import type { Board } from "../../domains";
 
 interface IBoardContext {
@@ -32,8 +33,27 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const addPhotoToBoard = (boardId: string, photoId: number) => {
-    BoardService.addPhotoToBoard(boardId, photoId);
-    setBoards(BoardService.getBoards());
+    const boards = BoardService.getBoards();
+    const boardIndex = boards.findIndex((b) => b.id === boardId);
+
+    if (boardIndex !== -1) {
+      // Добавляем фото, если его ещё нет в доске
+      if (!boards[boardIndex].photoIds.includes(photoId)) {
+        boards[boardIndex].photoIds.unshift(photoId); // Добавляем в начало
+
+        // Обновляем обложку
+        if (boards[boardIndex].photoIds.length <= 3) {
+          const { url } =
+            PhotoService.getSavedPhotos()?.find((p) => p.id === photoId) || {};
+          if (url) {
+            boards[boardIndex].coverPhotoUrl = url;
+          }
+        }
+
+        localStorage.setItem(PhotoService.STORAGE_KEY, JSON.stringify(boards));
+        setBoards(boards);
+      }
+    }
   };
 
   const openBoardModal = (photoId?: number) => {

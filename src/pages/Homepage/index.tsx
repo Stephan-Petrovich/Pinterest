@@ -2,6 +2,7 @@ import { Fragment } from "react/jsx-runtime";
 import Card from "../../components/Card";
 import type { ReactElement } from "react";
 import { usePhotoContext } from "../../context/PhotoContext";
+import CreateBoardModal from "../../components/CreateBoardModal";
 
 const Homepage = (): ReactElement => {
   const { photos } = usePhotoContext();
@@ -20,6 +21,8 @@ const Homepage = (): ReactElement => {
           ))}
         </div>
       )}
+
+      <CreateBoardModal />
     </Fragment>
   );
 };

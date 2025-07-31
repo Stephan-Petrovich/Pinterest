@@ -1,45 +1,43 @@
-import React, { useState } from "react";
-import CreateBoardModal from "../../components/CreateBoardModal";
-import { BoardService } from "../../services/boardService";
+import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import type { Board } from "../../domains";
+import { useBoardContext } from "../../context/BoardContext";
+import CreateBoardModal from "../../components/CreateBoardModal";
+import BoardCoverImage from "../../components/BoardCoverImage";
 
 const BoardsPage: React.FC = () => {
-  const [boards, setBoards] = useState(BoardService.getBoards());
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleCreateBoard = (newBoard: Board) => {
-    setBoards((prev) => [...prev, newBoard]);
-  };
+  const { boards, openBoardModal } = useBoardContext();
 
   return (
-    <div>
-      <div>
-        <h1>Мои доски</h1>
-        <button onClick={() => setIsModalOpen(true)}>Создать доску</button>
-      </div>
+    <div className="board-container">
+      <header className="board-header">
+        <h1 className="board-title">Мои доски</h1>
+        <button className="board-create-btn" onClick={() => openBoardModal()}>
+          Создать доску
+        </button>
+      </header>
 
       {boards.length === 0 ? (
-        <div>
-          <p>У вас пока нет досок</p>
-          <button onClick={() => setIsModalOpen(true)}>
-            Создать первую доску
+        <div className="board-empty-state">
+          <div className="board-empty-icon">📌</div>
+          <h3 className="board-empty-title">У вас пока нет досок</h3>
+          <button className="board-create-btn" onClick={() => openBoardModal()}>
+            Создать доску
           </button>
         </div>
       ) : (
-        <div>
+        <div className="board-grid">
           {boards.map((board) => (
-            <Link to={`/favorites/boards/${board.id}`} key={board.id}>
-              <div>
-                {board.photoIds.length > 0 ? (
-                  <img />
-                ) : (
-                  <span>Нет фотографий</span>
-                )}
+            <Link
+              to={`/favorites/boards/${board.id}`}
+              key={board.id}
+              className="board-card"
+            >
+              <div className="board-cover-container">
+                <BoardCoverImage photoIds={board.photoIds} />
               </div>
-              <div>
-                <h3>{board.title}</h3>
-                <p>
+              <div className="board-card-content">
+                <h3 className="board-card-title">{board.title}</h3>
+                <p className="board-card-count">
                   {board.photoIds.length}{" "}
                   {board.photoIds.length === 1 ? "пин" : "пинов"}
                 </p>
@@ -48,12 +46,7 @@ const BoardsPage: React.FC = () => {
           ))}
         </div>
       )}
-
-      <CreateBoardModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onCreate={handleCreateBoard}
-      />
+      <CreateBoardModal />
       <Outlet />
     </div>
   );

@@ -26,7 +26,10 @@ const Card: React.FC<{
       <img src={photo.url} alt={photo.title} loading="lazy"></img>
       <button
         className={`add-favorite ${buttonFavoriteClassname}`}
-        onClick={() => handleToggleFavorite(photo.id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleToggleFavorite(photo.id);
+        }}
         style={{
           visibility: isHovered ? "visible" : "hidden",
           opacity: isHovered ? "1" : "0",
@@ -36,7 +39,10 @@ const Card: React.FC<{
       </button>
       <button
         className="delete-image"
-        onClick={() => handleDeletePhoto(photo.id)}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleDeletePhoto(photo.id);
+        }}
         style={{
           visibility: isHovered ? "visible" : "hidden",
           opacity: isHovered ? "1" : "0",
@@ -44,7 +50,17 @@ const Card: React.FC<{
       >
         Удалить
       </button>
-      <button onClick={() => openBoardModal(photo.id)} className="add-to-board">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          openBoardModal(photo.id);
+        }}
+        className="add-to-board"
+        style={{
+          visibility: isHovered ? "visible" : "hidden",
+          opacity: isHovered ? "1" : "0",
+        }}
+      >
         Добавить в доску
       </button>
       <img
