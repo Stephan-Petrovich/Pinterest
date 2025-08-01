@@ -77,8 +77,23 @@ img {
   align-items: center;
 }
 
-.card {
+.photo-card {
   position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.photo-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
 }
 
 .favorite-icon {
@@ -244,7 +259,7 @@ img {
 .board-empty-title {
   font-size: 1.25rem;
   font-weight: 500;
-  color: #111827;
+  color: #f8f9fa;
   margin-bottom: 0.5rem;
 }
 
@@ -410,4 +425,100 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Board Card Styles */
+.board-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.board-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.board-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.board-cover {
+  aspect-ratio: 1/1;
+  background: #f5f5f5;
+  /* Ваши стили для отображения фотографий доски */
+}
+
+.board-info {
+  padding: 12px;
+}
+
+.board-title {
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board-count {
+  color: #666;
+  font-size: 0.875rem;
+  margin: 4px 0 0;
+}
+
+/* Delete Button Styles */
+.delete-board-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s;
+  color: #ff4444;
+}
+
+.delete-board-button:hover {
+  background: #ff4444;
+  color: white;
+  transform: scale(1.1);
+}
+
+.delete-board-button svg {
+  width: 16px;
+  height: 16px;
+}
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  transform: scale(1.1);
+}
+
+.action-btn.remove-from-board {
+  background: #ff4d4d;
+  color: white;
 }

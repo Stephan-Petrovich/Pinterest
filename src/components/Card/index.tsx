@@ -1,6 +1,7 @@
 import { usePhotoContext } from "../../context/PhotoContext";
 import { useBoardContext } from "../../context/BoardContext";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import type { Photo } from "../../domains";
 import favoriteIconSrc from "../../assets/images/favoriteIcon.svg";
 import "./styles.css";
@@ -9,13 +10,21 @@ const Card: React.FC<{
   photo: Photo;
 }> = ({ photo }) => {
   const { handleToggleFavorite, handleDeletePhoto } = usePhotoContext();
-  const { openBoardModal } = useBoardContext();
+  const { openBoardModal, removePhotoFromBoard } = useBoardContext();
+  const { boardId } = useParams();
 
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const buttonFavoriteClassname: string = !photo.isFavorite ? "" : "favorite";
+
+  const handleRemoveFromBoard = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (boardId) {
+      removePhotoFromBoard(boardId, photo.id);
+    }
+  };
   return (
     <div
-      className="card"
+      className="photo-card"
       onMouseEnter={() => {
         setIsHovered(true);
       }}
@@ -23,7 +32,12 @@ const Card: React.FC<{
         setIsHovered(false);
       }}
     >
-      <img src={photo.url} alt={photo.title} loading="lazy"></img>
+      <img
+        src={photo.url}
+        alt={photo.title}
+        className="photo-image"
+        loading="lazy"
+      ></img>
       <button
         className={`add-favorite ${buttonFavoriteClassname}`}
         onClick={(e) => {
@@ -63,6 +77,19 @@ const Card: React.FC<{
       >
         Добавить в доску
       </button>
+      {boardId && (
+        <button
+          onClick={handleRemoveFromBoard}
+          className="action-btn remove-from-board"
+          title="Удалить из доски"
+          style={{
+            visibility: isHovered ? "visible" : "hidden",
+            opacity: isHovered ? "1" : "0",
+          }}
+        >
+          🗑️
+        </button>
+      )}
       <img
         className="favorite-icon"
         style={{ visibility: !photo.isFavorite ? "hidden" : "visible" }}

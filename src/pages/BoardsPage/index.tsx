@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useBoardContext } from "../../context/BoardContext";
 import CreateBoardModal from "../../components/CreateBoardModal";
-import BoardCoverImage from "../../components/BoardCoverImage";
+import BoardCard from "../../components/BoardCard";
 
 const BoardsPage: React.FC = () => {
   const { boards, openBoardModal } = useBoardContext();
@@ -20,29 +20,11 @@ const BoardsPage: React.FC = () => {
         <div className="board-empty-state">
           <div className="board-empty-icon">📌</div>
           <h3 className="board-empty-title">У вас пока нет досок</h3>
-          <button className="board-create-btn" onClick={() => openBoardModal()}>
-            Создать доску
-          </button>
         </div>
       ) : (
         <div className="board-grid">
           {boards.map((board) => (
-            <Link
-              to={`/favorites/boards/${board.id}`}
-              key={board.id}
-              className="board-card"
-            >
-              <div className="board-cover-container">
-                <BoardCoverImage photoIds={board.photoIds} />
-              </div>
-              <div className="board-card-content">
-                <h3 className="board-card-title">{board.title}</h3>
-                <p className="board-card-count">
-                  {board.photoIds.length}{" "}
-                  {board.photoIds.length === 1 ? "пин" : "пинов"}
-                </p>
-              </div>
-            </Link>
+            <BoardCard key={board.id} board={board} />
           ))}
         </div>
       )}

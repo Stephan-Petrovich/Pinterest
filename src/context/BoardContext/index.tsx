@@ -11,6 +11,8 @@ interface IBoardContext {
   openBoardModal: (photoId?: number) => void;
   closeBoardModal: () => void;
   selectedPhotoId?: number;
+  deleteBoard: (boardId: string) => void;
+  removePhotoFromBoard: (boardId: string, photoId: number) => void;
 }
 
 const BoardContext = createContext<IBoardContext | null>(null);
@@ -32,28 +34,30 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const deleteBoard = (boardId: string) => {
+    BoardService.deleteBoard(boardId);
+    setBoards((prevBoards) => prevBoards.filter((b) => b.id !== boardId));
+  };
+
   const addPhotoToBoard = (boardId: string, photoId: number) => {
-    const boards = BoardService.getBoards();
-    const boardIndex = boards.findIndex((b) => b.id === boardId);
+    const photo = PhotoService.getPhotoById(photoId);
+    if (!photo) return;
+    BoardService.addPhotoToBoard(boardId, photoId);
+    setBoards(BoardService.getBoards());
+  };
 
-    if (boardIndex !== -1) {
-      // Добавляем фото, если его ещё нет в доске
-      if (!boards[boardIndex].photoIds.includes(photoId)) {
-        boards[boardIndex].photoIds.unshift(photoId); // Добавляем в начало
-
-        // Обновляем обложку
-        if (boards[boardIndex].photoIds.length <= 3) {
-          const { url } =
-            PhotoService.getSavedPhotos()?.find((p) => p.id === photoId) || {};
-          if (url) {
-            boards[boardIndex].coverPhotoUrl = url;
-          }
-        }
-
-        localStorage.setItem(PhotoService.STORAGE_KEY, JSON.stringify(boards));
-        setBoards(boards);
-      }
-    }
+  const removePhotoFromBoard = (boardId: string, photoId: number) => {
+    BoardService.removePhotoFromBoard(boardId, photoId);
+    setBoards((prevBoards) =>
+      prevBoards.map((board) =>
+        board.id === boardId
+          ? {
+              ...board,
+              photoIds: board.photoIds.filter((id) => id !== photoId),
+            }
+          : board
+      )
+    );
   };
 
   const openBoardModal = (photoId?: number) => {
@@ -76,6 +80,8 @@ export const BoardProvider: React.FC<{ children: React.ReactNode }> = ({
         openBoardModal,
         closeBoardModal,
         selectedPhotoId,
+        deleteBoard,
+        removePhotoFromBoard,
       }}
     >
       {children}

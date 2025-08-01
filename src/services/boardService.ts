@@ -25,15 +25,35 @@ export class BoardService {
     return newBoard;
   }
 
-  // Добавить фото в доску
-  public static addPhotoToBoard(boardId: string, photoId: number): void {
+  static addPhotoToBoard(boardId: string, photoId: number): void {
     const boards = this.getBoards();
-    const boardIndex = boards.findIndex((b) => b.id === boardId); //find перебирает массив и возвращает первый элемент, удовлетворяющий условию
+    const boardIndex = boards.findIndex((b) => b.id === boardId);
 
     if (boardIndex !== -1 && !boards[boardIndex].photoIds.includes(photoId)) {
-      //includes проверяет наличие элемента в массиве
-      boards[boardIndex].photoIds.push(photoId); //Добавляет id фотографии в конец массива
-      localStorage.setItem(this.BOARDS_KEY, JSON.stringify(boards));
+      // Создаем новый массив, а не мутируем существующий
+      const updatedBoards = boards.map((board, index) =>
+        index === boardIndex
+          ? { ...board, photoIds: [...board.photoIds, photoId] }
+          : board
+      );
+
+      localStorage.setItem(this.BOARDS_KEY, JSON.stringify(updatedBoards));
     }
+  }
+
+  static deleteBoard(boardId: string): void {
+    const boards = this.getBoards();
+    const updatedBoards = boards.filter((board) => board.id !== boardId);
+    localStorage.setItem(this.BOARDS_KEY, JSON.stringify(updatedBoards));
+  }
+
+  static removePhotoFromBoard(boardId: string, photoId: number): void {
+    const boards = this.getBoards();
+    const updatedBoards = boards.map((board) =>
+      board.id === boardId
+        ? { ...board, photoIds: board.photoIds.filter((id) => id !== photoId) }
+        : board
+    );
+    localStorage.setItem(this.BOARDS_KEY, JSON.stringify(updatedBoards));
   }
 }

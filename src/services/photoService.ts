@@ -1,7 +1,7 @@
 import type { Photo } from "../domains";
 
 export class PhotoService {
-  public static readonly STORAGE_KEY = "photos"; // Это ключи для сохранения/загрузки фотографий из локального хранилища.
+  private static readonly STORAGE_KEY = "photos"; // Это ключи для сохранения/загрузки фотографий из локального хранилища.
 
   /**
    * Сохраняет фотографии в localStorage
@@ -27,5 +27,10 @@ export class PhotoService {
       console.error("Ошибка при чтении из localStorage:", error);
       return null;
     }
+  }
+
+  static getPhotoById(photoId: number): Photo | undefined {
+    const photos = this.getSavedPhotos();
+    return photos?.find((p) => p.id === photoId);
   }
 }
