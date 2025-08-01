@@ -9,12 +9,18 @@ const Pins = (): ReactElement => {
   const favoriteImages = photos.filter((photo: Photo) => photo.isFavorite);
   return (
     <Fragment>
-      <h1>Избранные фотографии</h1>
-      <div className="gallery">
-        {favoriteImages.map((photo) => (
-          <Card key={photo.id} photo={photo} />
-        ))}
-      </div>
+      {favoriteImages.length === 0 ? (
+        <h1>Избранных фотографий пока нет</h1>
+      ) : (
+        <div>
+          <h1>Избранные фотографии</h1>
+          <div className="gallery">
+            {favoriteImages.map((photo) => (
+              <Card key={photo.id} photo={photo} />
+            ))}
+          </div>
+        </div>
+      )}
     </Fragment>
   );
 };
